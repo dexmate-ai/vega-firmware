@@ -1,6 +1,6 @@
 # 🤖 Vega Firmware Repository
 
-[![Firmware Hub](https://img.shields.io/badge/Live-Firmware%20Hub-blue)](https://dexmate-ai.github.io/vega-firmware/)
+[![Firmware Hub](https://img.shields.io/badge/Live-Firmware%20Hub-blue)](https://firmware.dexmate.ai/)
 [![GitHub Releases](https://img.shields.io/badge/Download-GitHub%20Releases-green)](https://github.com/dexmate-ai/vega-firmware/releases)
 
 This repository hosts firmware releases for Dexmate's Vega robots.
@@ -14,7 +14,7 @@ The Vega Firmware Repository provides a centralized distribution system for Dexm
 
 ### Via Web Interface
 
-Visit our [Firmware Hub](https://dexmate-ai.github.io/vega-firmware/) for the best experience:
+Visit our [Firmware Hub](https://firmware.dexmate.ai/) for the best experience:
 
 1. Browse available firmware versions
 2. View detailed changelogs and compatibility info
