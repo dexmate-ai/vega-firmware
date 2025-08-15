@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dexmate Firmware Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+    <div class="gradient-bg"></div>
+    <div class="container">
+        <header>
+            <div class="logo-section">
+                <div class="logo">
+                    <img src="assets/images/Dexmate_logo_white.png" alt="Dexmate Logo" class="logo-dark-mode">
+                </div>
+            </div>
+            <h1>Firmware Hub</h1>
+            <p class="subtitle">Advanced firmware distribution system for general-purpose AI robots</p>
+        </header>
+
+        <div id="message"></div>
+
+        <!-- Configuration section is hidden by default, can be shown for debugging -->
+        <div class="config-section" id="configSection" style="display: none;">
+            <h2>GitHub Repository Configuration</h2>
+            <div class="config-form">
+                <div class="form-group">
+                    <label for="repoOwner">Repository Owner</label>
+                    <input type="text" id="repoOwner" placeholder="e.g., dexmate-ai" value="dexmate-ai">
+                </div>
+                <div class="form-group">
+                    <label for="repoName">Repository Name</label>
+                    <input type="text" id="repoName" placeholder="e.g., vega-firmware" value="vega-firmware">
+                </div>
+                <button onclick="loadFirmwares()">Load Firmwares</button>
+            </div>
+        </div>
+
+        <div id="loading" class="loading" style="display: none;">Loading firmwares...</div>
+        <div id="firmwareList" class="firmware-grid"></div>
+    </div>
+
+    <script src="assets/js/app.js"></script>
+</body>
+</html>

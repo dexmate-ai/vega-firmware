@@ -1,0 +1,29 @@
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Editor files
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# Temporary files
+*.tmp
+*.bak
+
+# Logs
+*.log
+
+# Node modules (if any future JS dependencies)
+node_modules/
+
+# Build outputs (if any build process is added)
+dist/
+build/

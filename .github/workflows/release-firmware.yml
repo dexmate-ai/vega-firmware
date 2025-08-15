@@ -1,0 +1,149 @@
+name: Release Firmware
+
+on:
+  workflow_dispatch:
+    inputs:
+      firmware_path:
+        description: 'Path to the firmware .dexmate file'
+        required: true
+        type: string
+      version:
+        description: 'Firmware version (e.g., 1.0.0)'
+        required: true
+        type: string
+      changelog:
+        description: 'Release changelog'
+        required: true
+        type: string
+      prerelease:
+        description: 'Mark as pre-release'
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+          
+      - name: Install dependencies
+        run: |
+          pip install zstandard
+          
+      - name: Extract firmware metadata
+        id: metadata
+        run: |
+          cat > extract_metadata.py << 'EOF'
+          import json
+          import tarfile
+          import tempfile
+          import zstandard as zstd
+          import sys
+          from pathlib import Path
+          
+          def extract_metadata(firmware_path):
+              try:
+                  with tempfile.TemporaryDirectory() as temp_dir:
+                      extract_path = Path(temp_dir)
+                      
+                      # Decompress with zstandard
+                      dctx = zstd.ZstdDecompressor()
+                      with open(firmware_path, "rb") as compressed_file:
+                          decompressed_data = dctx.decompress(compressed_file.read())
+                      
+                      # Save decompressed tar
+                      temp_tar = extract_path / "temp.tar"
+                      with open(temp_tar, "wb") as tar_file:
+                          tar_file.write(decompressed_data)
+                      
+                      # Extract tar to get manifest
+                      with tarfile.open(temp_tar, "r") as tar:
+                          # Check if manifest exists
+                          members = tar.getnames()
+                          if "manifest.json" not in members:
+                              print("No manifest.json found", file=sys.stderr)
+                              return None
+                          
+                          # Extract only manifest
+                          manifest_member = tar.getmember("manifest.json")
+                          tar.extract(manifest_member, extract_path)
+                      
+                      # Read manifest
+                      manifest_path = extract_path / "manifest.json"
+                      with open(manifest_path, "r") as f:
+                          manifest = json.load(f)
+                      
+                      # Process metadata
+                      metadata = {
+                          "version": "${{ inputs.version }}",
+                          "changelog": """${{ inputs.changelog }}""",
+                          "upload_time": "",
+                          "filename": Path("${{ inputs.firmware_path }}").name,
+                          "package_info": {
+                              "firmware_version": manifest.get("version", "Unknown"),
+                              "package_version": manifest.get("package_version", "Unknown"),
+                              "created_at": manifest.get("created_at", ""),
+                              "components": manifest.get("contents", {}),
+                              "component_count": len(manifest.get("contents", {})),
+                              "supported_robots": manifest.get("metadata", {}).get("supported_robots", [])
+                          }
+                      }
+                      
+                      # Write metadata file
+                      with open("metadata_v${{ inputs.version }}.json", "w") as f:
+                          json.dump(metadata, f, indent=2)
+                      
+                      print(json.dumps(metadata))
+                      return metadata
+                      
+              except Exception as e:
+                  print(f"Error: {e}", file=sys.stderr)
+                  return None
+          
+          if __name__ == "__main__":
+              extract_metadata("${{ inputs.firmware_path }}")
+          EOF
+          
+          python extract_metadata.py
+          
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ inputs.version }}
+          release_name: Firmware v${{ inputs.version }}
+          body: ${{ inputs.changelog }}
+          draft: false
+          prerelease: ${{ inputs.prerelease }}
+          
+      - name: Upload Firmware Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ inputs.firmware_path }}
+          asset_name: firmware_v${{ inputs.version }}.dexmate
+          asset_content_type: application/octet-stream
+          
+      - name: Upload Metadata Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: metadata_v${{ inputs.version }}.json
+          asset_name: metadata_v${{ inputs.version }}.json
+          asset_content_type: application/json
