@@ -106,7 +106,7 @@ async function loadFirmwares() {
                                 `<span class="robot-badge">${robot}</span>`
                             ).join('') : ''}
                         </div>
-                        <span class="upload-time">${formatDate(release.published_at)}</span>
+                        <span class="upload-time">${formatDate(packageInfo?.created_at || release.published_at)}</span>
                     </div>
                     
                     ${packageInfo ? `
