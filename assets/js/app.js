@@ -128,7 +128,6 @@ async function loadFirmwares() {
                     <div class="file-info">
                         <span>${firmwareAsset.name}</span>
                         <span>${formatBytes(firmwareAsset.size)}</span>
-                        <span>${firmwareAsset.download_count} downloads</span>
                     </div>
                     
                     <div style="margin-top: 20px;">
