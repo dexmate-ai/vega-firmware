@@ -364,6 +364,105 @@ button:hover {
     color: var(--text-secondary);
 }
 
+/* Markdown Table Styles */
+.changelog table {
+    width: 100%;
+    margin: 16px 0;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: var(--bg-primary);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.changelog thead {
+    background: linear-gradient(135deg, rgba(64, 197, 255, 0.15), rgba(133, 84, 255, 0.15));
+}
+
+.changelog th {
+    padding: 12px 16px;
+    text-align: left;
+    font-weight: 600;
+    color: var(--text-primary);
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid rgba(64, 197, 255, 0.3);
+}
+
+.changelog tbody tr {
+    transition: all 0.2s;
+}
+
+.changelog tbody tr:hover {
+    background: rgba(64, 197, 255, 0.05);
+}
+
+.changelog tbody tr:not(:last-child) td {
+    border-bottom: 1px solid var(--border-color);
+}
+
+.changelog td {
+    padding: 12px 16px;
+    color: var(--text-secondary);
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.changelog td:first-child,
+.changelog th:first-child {
+    padding-left: 20px;
+}
+
+.changelog td:last-child,
+.changelog th:last-child {
+    padding-right: 20px;
+}
+
+/* Alternating row colors for better readability */
+.changelog tbody tr:nth-child(even) {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+/* Table cell alignment */
+.changelog th:nth-child(n+2),
+.changelog td:nth-child(n+2) {
+    text-align: center;
+}
+
+/* Make code inside tables more visible */
+.changelog td code {
+    background: rgba(64, 197, 255, 0.1);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: 'SF Mono', 'Monaco', 'Inconsolata', monospace;
+    font-size: 12px;
+    color: var(--accent-blue);
+}
+
+/* Responsive table */
+@media (max-width: 768px) {
+    .changelog table {
+        font-size: 12px;
+    }
+    
+    .changelog th,
+    .changelog td {
+        padding: 8px 12px;
+    }
+    
+    .changelog td:first-child,
+    .changelog th:first-child {
+        padding-left: 12px;
+    }
+    
+    .changelog td:last-child,
+    .changelog th:last-child {
+        padding-right: 12px;
+    }
+}
+
 .changelog-header {
     display: flex;
     justify-content: space-between;
