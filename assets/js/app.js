@@ -68,7 +68,7 @@ async function loadFirmwares() {
             let metadataAsset = null;
             
             for (const asset of release.assets || []) {
-                if (asset.name.endsWith('.dexmate')) {
+                if (asset.name.endsWith('.dexmate') || asset.name.endsWith('.dpfw')) {
                     firmwareAsset = asset;
                 } else if (asset.name.startsWith('metadata_')) {
                     metadataAsset = asset;
@@ -84,7 +84,11 @@ async function loadFirmwares() {
             // Try to fetch metadata
             if (metadataAsset) {
                 try {
-                    const metaResponse = await fetch(metadataAsset.browser_download_url);
+                    const metaResponse = await fetch(metadataAsset.url, {
+                        headers: {
+                            'Accept': 'application/octet-stream'
+                        }
+                    });
                     if (metaResponse.ok) {
                         const metadata = await metaResponse.json();
                         packageInfo = metadata.package_info;
