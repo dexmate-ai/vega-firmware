@@ -43,7 +43,7 @@ For firmware submissions or technical issues:
 
 ## 📚 Additional Resources
 
-- 🌐 **Website**: [dexmate.ai](https://dexmate.ai)
+- 🌐 **Website**: [dexmate.com](https://www.dexmate.com)
 - 📖 **Documentation**: [docs.dexmate.ai](https://docs.dexmate.ai)
 
 ---
